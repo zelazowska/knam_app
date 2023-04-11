@@ -1,88 +1,75 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ButtonsApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ButtonsApp extends StatelessWidget {
+  const ButtonsApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-  
-        primarySwatch: Colors.blue,
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                'Help me change colors!',
+                textScaleFactor: 1.5,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 50),
+              RainbowButton(),
+            ],
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  final String title;
+class RainbowButton extends StatefulWidget {
+  const RainbowButton({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<RainbowButton> createState() => RainbowButtonState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class RainbowButtonState extends State<RainbowButton> {
+  static const _colorArray = [
+    Colors.red,
+    Colors.orange,
+    Colors.yellow,
+    Colors.green,
+    Colors.blue,
+    Colors.purple,
+    Colors.pink,
+  ];
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values.
-      _counter++;
-    });
-  }
+  var colorIndex = 0;
+
+  void pressedCallback() => setState(() {
+        // color index was reset to 0 eveyr time build was called in build
+        // hence it should be in rainbowButtonState class
+        colorIndex == _colorArray.length ? colorIndex = 0 : colorIndex++;
+      });
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    return SizedBox(
+      height: 80,
+      width: 80,
+      child: FloatingActionButton(
+        onPressed: pressedCallback,
+        backgroundColor: _colorArray[colorIndex],
+        child: const Icon(
+          Icons.looks_outlined,
+          color: Colors.white,
+          size: 40,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), 
     );
   }
 }
